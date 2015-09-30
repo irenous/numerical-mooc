@@ -1,0 +1,40 @@
+#!/bin/python
+
+from numpy import *
+import matplotlib.pyplot as pyplot #our shortcut
+
+v = [0]
+h = [0]
+t = [0]
+mp = 100
+step = 0.001
+
+i = 0
+while True :
+    if mp > 0 :
+        mp = mp - step*20
+    if t[i] < 5 :
+        v_ = v[i] + step*(-9.81-(0.5*1.091*pi*0.25*0.15*v[i]*abs(v[i]))/(50+mp)+(20*325)/(50+mp))
+    else :
+        v_ = v[i] + step*(-9.81-(0.5*1.091*pi*0.25*0.15*v[i]*abs(v[i]))/(50+mp))
+
+    h_ = h[i] + v_*step
+
+    i = i + 1
+    v.append(v_)
+    h.append(h_)
+    t.append(t[i-1] + step)
+
+    if h_ < 0 :
+        print(t[i], v[i])
+
+    if h_ < -10 :
+        break
+
+pyplot.plot(t,h)
+pyplot.plot(t,v)
+pyplot.show()
+
+print(max(h), t[h.index(max(h))])
+print(max(v), t[v.index(max(v))], h[v.index(max(v))])
+
