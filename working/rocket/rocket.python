@@ -1,40 +1,48 @@
 #!/bin/python
 
-from numpy import *
-import matplotlib.pyplot as pyplot #our shortcut
+import numpy as npy
+import matplotlib.pyplot as plt
 
-v = [0]
-h = [0]
-t = [0]
-mp = 100
-step = 0.001
 
-i = 0
-while True :
-    if mp > 0 :
-        mp = mp - step*20
-    if t[i] < 5 :
-        v_ = v[i] + step*(-9.81-(0.5*1.091*pi*0.25*0.15*v[i]*abs(v[i]))/(50+mp)+(20*325)/(50+mp))
-    else :
-        v_ = v[i] + step*(-9.81-(0.5*1.091*pi*0.25*0.15*v[i]*abs(v[i]))/(50+mp))
+def func(t, v, mp0):
+    mp = mp0 - t*20
+    if mp < 0 :
+        mp = 0
 
-    h_ = h[i] + v_*step
+    v_ = -9.81 - (0.5*1.091*npy.pi*0.25*0.15*v*npy.abs(v))/(50+mp)
+    if t < 5 :
+        v_ = v_ +(20*325)/(50+mp)
 
-    i = i + 1
-    v.append(v_)
-    h.append(h_)
-    t.append(t[i-1] + step)
+    return v_
 
-    if h_ < 0 :
-        print(t[i], v[i])
+def stop(h, v, step):
+    h.append(h[-1] + v[-1]*step) #v[-1] ou v[-2] ? : on prend la vitesse de cette itération est celle d'avant ?
 
-    if h_ < -10 :
-        break
+    return (h[-1] < 0)
 
-pyplot.plot(t,h)
-pyplot.plot(t,v)
-pyplot.show()
+def solve(x, y, f_func, stop_func, dx):
+    i = 0
+    while True :
+        x.append(x[i] + dx)
+        y.append(y[i] + dx*f_func(x[i], y[i]))
 
-print(max(h), t[h.index(max(h))])
-print(max(v), t[v.index(max(v))], h[v.index(max(v))])
+        if stop_func(x, y, i) :
+            break
+
+        i = i + 1
+
+if __name__ == "__main__":
+    t = [0]
+    h = [0]
+    v = [0]
+
+    solve(t, v, lambda x, y: func(x, y, 100), lambda x, y, i: stop(h, y, 0.001), 0.001)
+
+    plt.plot(t,h)
+    plt.plot(t,v)
+    plt.show()
+
+    print(t[-1], v[-1])
+    print(max(h), t[h.index(max(h))])
+    print(max(v), t[v.index(max(v))], h[v.index(max(v))])
 
