@@ -1,5 +1,3 @@
-#!/bin/python
-
 import numpy as npy
 import matplotlib.pyplot as plt
 
