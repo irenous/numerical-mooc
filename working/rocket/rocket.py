@@ -36,11 +36,11 @@ if __name__ == "__main__":
 
     solve(t, v, lambda x, y: func(x, y, 100), lambda x, y, i: stop(h, y, 0.001), 0.001)
 
+    print("Temps et vitesse du retour au sol :", t[-1], v[-1])
+    print("Hauteur max et temps :", max(h), t[h.index(max(h))])
+    print("Vitesse max, temps et hauteur :", max(v), t[v.index(max(v))], h[v.index(max(v))])
+
     plt.plot(t,h)
     plt.plot(t,v)
     plt.show()
-
-    print(t[-1], v[-1])
-    print(max(h), t[h.index(max(h))])
-    print(max(v), t[v.index(max(v))], h[v.index(max(v))])
 
