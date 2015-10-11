@@ -1,12 +1,17 @@
 import numpy as npy
 import matplotlib.pyplot as plt
 
-def f(t, u, ms = 50.0, g = -9.81, rho = 1.091, r = 0.5, ve = 325, CD = 0.15, mpdot = 20):
+def mpdot(t):
+    if t < 5 :
+        return -20
+    else:
+        return 0
+
+def f(t, u, mpdot_func, ms = 50.0, g = -9.81, rho = 1.091, r = 0.5, ve = 325, CD = 0.15):
     u_ = npy.zeros(3)
 
     # Mass u_[0]
-    if t < 5 :
-        u_[0] = -mpdot
+    u_[0] = mpdot_func(t)
     
     # Height u_[1]
     u_[1] = u[2]
@@ -36,7 +41,7 @@ if __name__ == "__main__":
     u = npy.zeros((3, int(40/dt)))
     u[0, 0] = 100
 
-    i = solve(t, u, f, stop, dt)
+    i = solve(t, u, lambda t, u: f(t, u, mpdot), stop, dt)
 
     print("Temps et vitesse du retour au sol :", t[i], u[2, i])
     hmax = npy.amax(u[1,:])
