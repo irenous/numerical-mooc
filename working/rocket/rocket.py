@@ -2,10 +2,10 @@ import numpy as npy
 import matplotlib.pyplot as plt
 
 def mpdot(t):
-    if t < 5 :
-        return -20
+    if t < 5.0 :
+        return -20.0
     else:
-        return 0
+        return 0.0
 
 def f(t, u, mpdot_func, ms = 50.0, g = -9.81, rho = 1.091, r = 0.5, ve = 325, CD = 0.15):
     u_ = npy.zeros(3)
@@ -35,11 +35,12 @@ def solve(t, u, f_func, stop_func, dt):
         i = i + 1
 
 if __name__ == "__main__":
+    t_to_sim = 40.0
     dt = 0.1
 
-    t = npy.linspace(0, 40, int(40/dt))
-    u = npy.zeros((3, int(40/dt)))
-    u[0, 0] = 100
+    t = npy.linspace(0, t_to_sim, int(t_to_sim/dt))
+    u = npy.zeros((3, int(t_to_sim/dt)))
+    u[0, 0] = 100.0
 
     i = solve(t, u, lambda t, u: f(t, u, mpdot), stop, dt)
 
